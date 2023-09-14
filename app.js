@@ -11,8 +11,8 @@ const execProcess = (command, timer) => {
     console.clear();
     console.log(`${stdout}`);
 
-    if (minuteTimer === 60000) {
-      fs.appendFile('activityMonitor.log', `${Math.floor(new Date().getTime() / 1000)}: ${stdout}`, (err) => {
+    if (minuteTimer === 60000) { fs.appendFile('activityMonitor.log', `${Math.floor(new Date().getTime() / 1000)}: ${stdout}`,
+      (err) => {
         if (err) throw err;
       });
       minuteTimer = 0;
