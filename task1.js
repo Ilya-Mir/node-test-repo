@@ -10,27 +10,19 @@ export class EventEmitter {
   }
 
   on(eventName, fn) {
-    if (Array.isArray(this.listeners[eventName])) {
-      this.listeners[eventName].push({fn: fn, isOnce: false});
-    } else {
-      this.listeners[eventName] = [{fn: fn, isOnce: false}];
-    }
+    this.addListener(eventName, fn);
   }
 
   removeListener(eventName, fn) {
     for (const listenerIndex in this.listeners[eventName]) {
       if (this.listeners[eventName][listenerIndex].fn === fn) {
-        delete this.listeners[eventName].splice(listenerIndex, 1);
+        this.listeners[eventName].splice(listenerIndex, 1);
       }
     }
   }
 
   off(eventName, fn) {
-    for (const listenerIndex in this.listeners[eventName]) {
-      if (this.listeners[eventName][listenerIndex].fn === fn) {
-        delete this.listeners[eventName].splice(listenerIndex, 1);
-      }
-    }
+    this.removeListener(eventName, fn);
   }
 
   once(eventName, fn) {
@@ -45,7 +37,7 @@ export class EventEmitter {
     for (const listenerIndex in this.listeners[eventName]) {
       this.listeners[eventName][listenerIndex].fn(...args);
       if (this.listeners[eventName][listenerIndex].isOnce) {
-        delete this.listeners[eventName].splice(listenerIndex, 1);
+        this.listeners[eventName].splice(listenerIndex, 1);
       }
     }
   }
@@ -63,7 +55,7 @@ export class EventEmitter {
         rawArray.push(this.listeners[eventName][listenerIndex].fn);
       }
     }
-    return rawArray
+    return rawArray;
   }
 }
 
