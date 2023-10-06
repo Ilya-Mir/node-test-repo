@@ -1,12 +1,12 @@
 import {addUser, deleteUser, getUser, updateUser} from '../services/usersService.js';
 
 export const createUserHandler = (newUser, res) => {
-  addUser(global.users, newUser);
+  addUser(newUser);
   res.statusCode = 201;
   res.end('Successfully created user');
 };
 export const deleteUserHandler = (id, res) => {
-  const result = deleteUser(global.users, id);
+  const result = deleteUser(id);
   if (!result) {
     res.statusCode = 404;
     res.end('Not Found');
@@ -15,10 +15,10 @@ export const deleteUserHandler = (id, res) => {
     res.end("Successfully remove");
   }
   return result;
-}
+};
 
 export const updateUserHandler = (body, res) => {
-  const result = updateUser(global.users, body);
+  const result = updateUser(body);
   if (!result) {
     res.statusCode = 404;
     res.end('Not Found');
@@ -26,10 +26,10 @@ export const updateUserHandler = (body, res) => {
     res.statusCode = 200;
     res.end("Successfully updated");
   }
-}
+};
 
 export const getUserById = (id, res) => {
-  const result = getUser(global.users, id);
+  const result = getUser(id);
   if (!result) {
     res.statusCode = 404;
     res.end('Not Found');
@@ -37,4 +37,4 @@ export const getUserById = (id, res) => {
     res.statusCode = 200;
     res.end(JSON.stringify(result));
   }
-}
+};

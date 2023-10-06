@@ -1,6 +1,21 @@
 import {generateNewId} from '../utils/generateNewId.js';
 
-export const addUser = (USERS, newUserData) => {
+const USERS = [
+  {
+    id: 1,
+    name: 'Ann',
+    email: 'ann@google.com',
+    hobbies: ['books', 'sport', 'dancing'],
+  },
+  {
+    id: 2,
+    name: 'Ben',
+    email: 'ben@google.com',
+    hobbies: ['series', 'sport'],
+  },
+];
+
+export const addUser = (newUserData) => {
   const newUserWithId = {
     ...newUserData,
     id: generateNewId(USERS)
@@ -9,7 +24,7 @@ export const addUser = (USERS, newUserData) => {
   USERS.push(newUserWithId);
 }
 
-export const deleteUser = (USERS, id) => {
+export const deleteUser = (id) => {
   const indexOfUser = USERS.findIndex(USER => USER.id.toString() === id);
   if (indexOfUser !== -1) {
     USERS.splice(indexOfUser, 1);
@@ -19,11 +34,11 @@ export const deleteUser = (USERS, id) => {
   }
 }
 
-export const getUser = (USERS, id) => {
+export const getUser = (id) => {
   return USERS.find(USER => USER.id.toString() === id.toString())
 }
 
-export const updateUser = (USERS, newUserData) => {
+export const updateUser = (newUserData) => {
   const indexOfUser = USERS.findIndex(USER => USER.id.toString() === newUserData.id.toString());
   if (indexOfUser !== -1) {
     USERS[indexOfUser] = {
