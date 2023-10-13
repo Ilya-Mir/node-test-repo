@@ -7,7 +7,7 @@ export const ID_HEADER_NAME = "x-user-id"
 
 export const getUserHandler = (req: Request, res: Response) => {
   const id = req.get(ID_HEADER_NAME)
-  const user = getUserById(id);
+  const user = id && getUserById(id);
 
 
   if (!user) {
@@ -23,7 +23,7 @@ export const getUserHandler = (req: Request, res: Response) => {
 export const updateUserHandler = (req: Request, res: Response) => {
   const id = req.get(ID_HEADER_NAME)
 
-  const user = getUserById(id);
+  const user = id && getUserById(id);
 
 
   if (!user) {
@@ -31,7 +31,7 @@ export const updateUserHandler = (req: Request, res: Response) => {
     return;
   }
 
-  const result = updateUserData(req.body, id)
+  const result = id && updateUserData(req.body, id)
 
   // @ts-ignore
   if (result?.error) {

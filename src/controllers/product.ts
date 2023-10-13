@@ -6,7 +6,7 @@ import {getProduct, getProducts} from "../services/product";
 
 export const productsHandler = (req: Request, res: Response) => {
   const id = req.get(ID_HEADER_NAME)
-  const user = getUserById(id);
+  const user = id && getUserById(id);
 
 
   if (!user) {
@@ -22,7 +22,7 @@ export const productsHandler = (req: Request, res: Response) => {
 
 export const productHandler = (req: Request, res: Response) => {
   const id = req.get(ID_HEADER_NAME)
-  const user = getUserById(id);
+  const user = id && getUserById(id);
 
 
   if (!user) {
