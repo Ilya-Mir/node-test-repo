@@ -1,9 +1,9 @@
 import {getAllProducts, getProductById} from "../repository/product";
 
-export function getProducts() {
+export function getProductsService() {
   return getAllProducts()
 }
 
-export function getProduct(id: string) {
+export function getProductService(id: string) {
   return getProductById(id)
 }

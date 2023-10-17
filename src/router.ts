@@ -1,28 +1,28 @@
 import express, {Request, Response} from "express";
-import {checkoutHandler, getUserHandler, removeUserHandler, updateUserHandler} from "./controllers/user";
-import {productHandler, productsHandler} from "./controllers/product";
+import {calculateUser, getUser, removeUser, updateUser} from "./controllers/user";
+import {getProductById, getProducts} from "./controllers/product";
 
 export const profileRouter = express.Router();
 export const productsRouter = express.Router();
 // const authRouter = express.Router();
 
-profileRouter.get('/card', (req: Request, res: Response) => {
-  getUserHandler(req, res)
+profileRouter.get('/cart', (req: Request, res: Response) => {
+  getUser(req, res)
 });
-profileRouter.put('/card',  (req: Request, res: Response) => {
-  updateUserHandler(req, res);
+profileRouter.put('/cart',  (req: Request, res: Response) => {
+  updateUser(req, res);
 });
-profileRouter.delete('/card', (req: Request, res: Response) => {
-  removeUserHandler(req, res)
+profileRouter.delete('/cart', (req: Request, res: Response) => {
+  removeUser(req, res)
 });
-profileRouter.post('/card/checkout', (req: Request, res: Response) => {
-  checkoutHandler(req, res)
+profileRouter.post('/cart/checkout', (req: Request, res: Response) => {
+  calculateUser(req, res)
 });
-productsRouter.put('/:userId/groups', (req: Request, res: Response) => {
-  productHandler(req, res)
+productsRouter.get('/:productId', (req: Request, res: Response) => {
+  getProductById(req, res)
 });
 productsRouter.get('/', (req: Request, res: Response) => {
-  productsHandler(req, res)
+  getProducts(req, res)
 });
 
 // authRouter.post('/register', () => {});

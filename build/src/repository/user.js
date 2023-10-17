@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkoutUser = exports.deleteUser = exports.updateUser = exports.getUser = void 0;
+exports.calculateUser = exports.deleteUser = exports.updateUser = exports.getUser = void 0;
 const user_entity_1 = require("../schemas/user.entity");
 const usersIds = [
     user_entity_1.userEntity
@@ -15,6 +15,9 @@ const getUser = (userId) => {
 exports.getUser = getUser;
 const updateUser = (userBody, userId) => {
     const changedUser = usersInfo.find(userInfo => userInfo.cart.userId === userId);
+    if (!changedUser) {
+        throw new Error("User not found");
+    }
     changedUser.cart = {
         ...changedUser.cart,
         ...userBody
@@ -24,6 +27,9 @@ const updateUser = (userBody, userId) => {
 exports.updateUser = updateUser;
 const deleteUser = (userId) => {
     const changedUser = usersInfo.find(userInfo => userInfo.cart.userId === userId);
+    if (!changedUser) {
+        return false;
+    }
     changedUser.cart = {
         ...changedUser.cart,
         isDeleted: true
@@ -31,8 +37,11 @@ const deleteUser = (userId) => {
     return true;
 };
 exports.deleteUser = deleteUser;
-const checkoutUser = (userId) => {
+const calculateUser = (userId) => {
     const changedUser = usersInfo.find(userInfo => userInfo.cart.userId === userId);
+    if (!changedUser) {
+        return false;
+    }
     return {
         "order": {
             ...changedUser.cart,
@@ -51,4 +60,4 @@ const checkoutUser = (userId) => {
         }
     };
 };
-exports.checkoutUser = checkoutUser;
+exports.calculateUser = calculateUser;

@@ -1,5 +1,7 @@
 import {UserInfo} from "../schemas/user.entity";
 
-export const hideDeleteStatus = (user: any) => {
-  return delete user.cart.isDeleted
+export const hideDeleteUserStatus = (user: UserInfo): UserInfo => {
+  const { ...userWithoutDeletedStatus} = user;
+  delete userWithoutDeletedStatus?.cart?.isDeleted
+  return userWithoutDeletedStatus
 }

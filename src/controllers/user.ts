@@ -1,62 +1,65 @@
-import {checkoutUserData, deleteUserData, getUserById, updateUserData} from "../services/user";
+import {calculateUserOrder, deleteUserData, getUserById, updateUserData} from "../services/user";
 import {Request, Response} from "express";
-import {returnUnauthorized} from "../utils/return-unauthorized";
-import {hideDeleteStatus} from "../utils/hide-delete-status";
+import {hideDeleteUserStatus} from "../utils/hide-delete-status";
+import {ID_HEADER_NAME} from "../constants";
+import Joi from "joi";
+import {products} from "../schemas/product.entity";
 
-export const ID_HEADER_NAME = "x-user-id"
-
-export const getUserHandler = (req: Request, res: Response) => {
+export const getUser = (req: Request, res: Response) => {
   const id = req.get(ID_HEADER_NAME)
-  const user = id && getUserById(id);
-
-
-  if (!user) {
-    returnUnauthorized(res)
-    return;
-  }
-
-  res
-      .status(200)
-      .send({data: hideDeleteStatus(user), error: null});
-}
-
-export const updateUserHandler = (req: Request, res: Response) => {
-  const id = req.get(ID_HEADER_NAME)
-
-  const user = id && getUserById(id);
-
-
-  if (!user) {
-    returnUnauthorized(res)
-    return;
-  }
-
-  const result = id && updateUserData(req.body, id)
-
-  // @ts-ignore
-  if (result?.error) {
-    res
-        .status(400)
-        // @ts-ignore
-        .send({data: null, error: {message: result?.value}});
-    return;
-  }
-
-  res
-      .status(200)
-      .send({data: hideDeleteStatus(result), error: null});
-}
-
-export const removeUserHandler = (req: Request, res: Response) => {
-  const id = req.get(ID_HEADER_NAME)
-
   const user = getUserById(id);
 
+  res
+      .status(200)
+      .send({data: hideDeleteUserStatus(user), error: null});
+}
 
-  if (!user) {
-    returnUnauthorized(res)
-    return;
+export const updateUser = (req: Request, res: Response) => {
+  const id = req.get(ID_HEADER_NAME)
+
+  const userDataSchema = Joi.object({
+    id: Joi.string()
+        .required(),
+
+    items: [
+      Joi.object({
+        product: Joi.object({
+          id: Joi.string().valid(...products.map(product => product.id)).required(),
+          title:  Joi.string().required(),
+          description: Joi.string().required(),
+          price: Joi.number().required()
+        }),
+        count: Joi.number().required()
+      })
+    ],
+  })
+
+  const { error } = userDataSchema.validate(req.body);
+
+  if (!error) {
+    res
+        .status(403)
+        // @ts-ignore
+        .send({data: null, error: {message: error}});
+  } else {
+
+    const result = updateUserData(req.body, id)
+
+    if (result) {
+      res
+          .status(200)
+          .send({data: hideDeleteUserStatus(result), error: null});
+    } else {
+      res
+          .status(400)
+          .send({data: null, error: {message: "User not deleted"}});
+    }
+
   }
+}
+
+export const removeUser = (req: Request, res: Response) => {
+  const id = req.get(ID_HEADER_NAME)
 
   const result = deleteUserData(id)
 
@@ -68,23 +71,26 @@ export const removeUserHandler = (req: Request, res: Response) => {
           error: null
         });
     return;
+  } else {
+    res
+        .status(400)
+        .send({data: null, error: {message: "User not deleted"}});
+    return;
   }
 }
 
-export const checkoutHandler = (req: Request, res: Response) => {
+export const calculateUser = (req: Request, res: Response) => {
   const id = req.get(ID_HEADER_NAME)
 
-  const user = getUserById(id);
+  const result = calculateUserOrder(id)
 
-
-  if (!user) {
-    returnUnauthorized(res);
-    return;
+  if (result) {
+    res
+        .status(200)
+        .send({data: result, error: null});
+  } else {
+    res
+        .status(400)
+        .send({data: null, error: {message: "Unable to create an order"}});
   }
-
-  const result = checkoutUserData(id)
-
-  res
-      .status(200)
-      .send({data: hideDeleteStatus(result), error: null});
 }

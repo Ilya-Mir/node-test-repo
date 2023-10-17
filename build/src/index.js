@@ -4,39 +4,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const user_1 = require("./controllers/user");
-const product_1 = require("./controllers/product");
+const constants_1 = require("./constants");
+const router_1 = require("./router");
+const body_parser_1 = __importDefault(require("body-parser"));
+const jsonParser = body_parser_1.default.json();
 const app = (0, express_1.default)();
-const profileRouter = express_1.default.Router();
-const productsRouter = express_1.default.Router();
-// const authRouter = express.Router();
-profileRouter.get('/card', (req, res) => {
-    (0, user_1.getUserHandler)(req, res);
-});
-profileRouter.put('/card', (req, res) => {
-    (0, user_1.updateUserHandler)(req, res);
-});
-profileRouter.delete('/card', (req, res) => {
-    (0, user_1.removeUserHandler)(req, res);
-});
-profileRouter.post('/card/checkout', (req, res) => {
-    (0, user_1.checkoutHandler)(req, res);
-});
-productsRouter.put('/:userId/groups', (req, res) => {
-    (0, product_1.productHandler)(req, res);
-});
-productsRouter.get('/', (req, res) => {
-    (0, product_1.productsHandler)(req, res);
-});
-// authRouter.post('/register', () => {});
-// authRouter.get('/login', () => {});
 const logger = (req, res, next) => {
     console.log(`New request: ${req.method}, ${req.url}`);
     next();
 };
 app.use(logger);
+app.use(jsonParser);
 app.use((req, res, next) => {
-    const id = req.get(user_1.ID_HEADER_NAME);
+    const id = req.get(constants_1.ID_HEADER_NAME);
     if (!id) {
         res
             .status(403)
@@ -50,12 +30,9 @@ app.use((req, res, next) => {
     }
     next();
 });
-app.use('/api/profile', profileRouter);
-app.use('/api/products', productsRouter);
+app.use('/api/profile', router_1.profileRouter);
+app.use('/api/products', router_1.productsRouter);
 // app.use('/api/auth', authRouter);
-app.listen(3000, () => {
-    console.log('Server is started');
-});
 app.use((err, req, res, next) => {
     console.log(err);
     res.status(500);
@@ -66,4 +43,7 @@ app.use((err, req, res, next) => {
         }
     });
     next();
+});
+app.listen(3000, () => {
+    console.log('Server is started');
 });

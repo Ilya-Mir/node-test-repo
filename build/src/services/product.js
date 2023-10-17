@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProduct = exports.getProducts = void 0;
+exports.getProductService = exports.getProductsService = void 0;
 const product_1 = require("../repository/product");
-function getProducts() {
+function getProductsService() {
     return (0, product_1.getAllProducts)();
 }
-exports.getProducts = getProducts;
-function getProduct(id) {
+exports.getProductsService = getProductsService;
+function getProductService(id) {
     return (0, product_1.getProductById)(id);
 }
-exports.getProduct = getProduct;
+exports.getProductService = getProductService;

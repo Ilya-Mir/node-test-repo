@@ -1,10 +1,12 @@
-import {NextFunction} from "express";
-import express, {Request, Response} from 'express';
+import express, {NextFunction, Request, Response} from 'express';
 import {
   ID_HEADER_NAME,
-} from "./controllers/user";
+} from "./constants";
 import {productsRouter, profileRouter} from "./router";
+import bodyParser from "body-parser";
 
+
+const jsonParser = bodyParser.json()
 
 const app = express();
 
@@ -14,6 +16,7 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
 }
 
 app.use(logger);
+app.use(jsonParser);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   const id = req.get(ID_HEADER_NAME)
