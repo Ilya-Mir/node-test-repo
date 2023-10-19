@@ -1,6 +1,7 @@
 import express, {Request, Response} from "express";
 import {calculateUser, getUser, removeUser, updateUser} from "./controllers/user";
 import {getProductById, getProducts} from "./controllers/product";
+import {validateUser} from "./midllware/validateUser";
 
 export const profileRouter = express.Router();
 export const productsRouter = express.Router();
@@ -9,7 +10,7 @@ export const productsRouter = express.Router();
 profileRouter.get('/cart', (req: Request, res: Response) => {
   getUser(req, res)
 });
-profileRouter.put('/cart',  (req: Request, res: Response) => {
+profileRouter.put('/cart', validateUser,  (req: Request, res: Response) => {
   updateUser(req, res);
 });
 profileRouter.delete('/cart', (req: Request, res: Response) => {

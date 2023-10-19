@@ -20,7 +20,7 @@ export const updateUser = (userBody: CartEntity, userId: string): UserInfo => {
   const changedUser = usersInfo.find(userInfo => userInfo.cart.userId === userId);
 
   if (!changedUser) {
-    throw new Error("User not found")
+    return null
   }
 
   changedUser.cart = {
@@ -45,15 +45,15 @@ export const deleteUser = (userId: string): boolean  => {
 }
 
 export const calculateUser = (userId: string): { order: OrderEntity} | false => {
-  const changedUser = usersInfo.find(userInfo => userInfo.cart.userId === userId);
+  const user = usersInfo.find(userInfo => userInfo.cart.userId === userId);
 
-  if (!changedUser) {
-    return false
+  if (!user.cart.items.length) {
+    return null
   }
 
   return {
     "order": {
-      ...changedUser.cart,
+      ...user.cart,
       "payment": {
         "type": "paypal",
         "address": "London",

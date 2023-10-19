@@ -6,8 +6,6 @@ import {productsRouter, profileRouter} from "./router";
 import bodyParser from "body-parser";
 
 
-const jsonParser = bodyParser.json()
-
 const app = express();
 
 const logger = (req: Request, res: Response, next: NextFunction) => {
@@ -16,7 +14,7 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
 }
 
 app.use(logger);
-app.use(jsonParser);
+app.use(express.json());
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   const id = req.get(ID_HEADER_NAME)

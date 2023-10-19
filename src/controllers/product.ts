@@ -10,7 +10,7 @@ export const getProducts = (req: Request, res: Response) => {
 }
 
 export const getProductById = (req: Request, res: Response) => {
-  const result = getProductService(req.params.productId.toString())
+  const result = getProductService(req.params.productId)
 
   if (result) {
     res

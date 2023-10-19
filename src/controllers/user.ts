@@ -4,57 +4,37 @@ import {hideDeleteUserStatus} from "../utils/hide-delete-status";
 import {ID_HEADER_NAME} from "../constants";
 import Joi from "joi";
 import {products} from "../schemas/product.entity";
+import {validateUser} from "../midllware/validateUser";
 
 export const getUser = (req: Request, res: Response) => {
   const id = req.get(ID_HEADER_NAME)
   const user = getUserById(id);
 
+
+  if (!user) {
+    res
+        .status(404)
+        .send({data: null, error: {message: "Not found"}});
+  }
   res
       .status(200)
       .send({data: hideDeleteUserStatus(user), error: null});
+
 }
 
 export const updateUser = (req: Request, res: Response) => {
   const id = req.get(ID_HEADER_NAME)
 
-  const userDataSchema = Joi.object({
-    id: Joi.string()
-        .required(),
+  const result = updateUserData(req.body, id)
 
-    items: [
-      Joi.object({
-        product: Joi.object({
-          id: Joi.string().valid(...products.map(product => product.id)).required(),
-          title:  Joi.string().required(),
-          description: Joi.string().required(),
-          price: Joi.number().required()
-        }),
-        count: Joi.number().required()
-      })
-    ],
-  })
-
-  const { error } = userDataSchema.validate(req.body);
-
-  if (!error) {
+  if (result) {
     res
-        .status(403)
-        // @ts-ignore
-        .send({data: null, error: {message: error}});
+        .status(200)
+        .send({data: hideDeleteUserStatus(result), error: null});
   } else {
-
-    const result = updateUserData(req.body, id)
-
-    if (result) {
-      res
-          .status(200)
-          .send({data: hideDeleteUserStatus(result), error: null});
-    } else {
-      res
-          .status(400)
-          .send({data: null, error: {message: "User not deleted"}});
-    }
-
+    res
+        .status(404)
+        .send({data: null, error: {message: "User not update"}});
   }
 }
 
@@ -70,12 +50,10 @@ export const removeUser = (req: Request, res: Response) => {
           data: true,
           error: null
         });
-    return;
   } else {
     res
-        .status(400)
-        .send({data: null, error: {message: "User not deleted"}});
-    return;
+        .status(404)
+        .send({data: null, error: {message: "User not found"}});
   }
 }
 
@@ -91,6 +69,6 @@ export const calculateUser = (req: Request, res: Response) => {
   } else {
     res
         .status(400)
-        .send({data: null, error: {message: "Unable to create an order"}});
+        .send({data: null, error: {message: "Cart is empty"}});
   }
 }
