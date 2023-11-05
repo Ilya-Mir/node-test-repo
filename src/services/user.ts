@@ -1,22 +1,31 @@
 import {CartEntity} from "../schemas/cart.entity";
 
-const Joi = require('joi');
 
+import AppDataSource from "../data-source";
+import {Cart} from "../entity/Cart";
+import {createNewCart} from "../utils/creation-test";
 
-import {calculateUser, deleteUser, getUser, updateUser} from "../repository/user";
-
-export function getUserById(userId: string) {
-  return getUser(userId)
+export async function getUserById(userId: number) {
+  const cartRepository = AppDataSource.getRepository(Cart);
+  const userCart = await cartRepository.find({ where: { id: userId } });
+  return userCart
 }
 
-export function deleteUserData(userId: string) {
-  return deleteUser(userId)
+export async function deleteUserData(userId: string) {
+  const cartRepository =  AppDataSource.getRepository(Cart);
+
+  await cartRepository.update(userId, { isDeleted: true });
+  return true
 }
 
-export function updateUserData(userData: CartEntity, id: string) {
- return updateUser(userData, id)
+export async function updateUserData(userData: CartEntity, id: number) {
+  const cartRepository = AppDataSource.getRepository(Cart);
+  await cartRepository.update(id, userData);
+  const updatedUserCart = await cartRepository.find({ where: { id: id } });
+  return updatedUserCart
 }
 
-export function calculateUserOrder(id: string) {
-  return calculateUser(id)
+export async function calculateUserOrder(id: string) {
+
+  return null
 }

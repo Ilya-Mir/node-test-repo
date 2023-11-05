@@ -8,14 +8,14 @@ export interface OrderEntity {
   comments: string;
   isDeleted?: boolean;
   payment: { address: string; type: string; creditCard: string };
-  id: string;
+  id: number;
   userId?: string;
   items: CartItemEntity[];
   status: string
 }
 
 const order: OrderEntity = {
-  id: 'dffd6fa8-be6b-47f6-acff-455612620ac2',
+  id: 2,
   userId: '0fe36d16-49bc-4aab-a227-f84df899a6cb',
   items: cart.items,
   payment: {
