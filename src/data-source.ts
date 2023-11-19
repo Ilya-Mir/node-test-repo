@@ -6,7 +6,7 @@ import {Cart} from "./entity/Cart";
 import {Order} from "./entity/Order";
 import {CartItem} from "./entity/CartItem";
 
-export const AppDataSource = new DataSource({
+const AppDataSource = new DataSource({
   host: 'localhost',
   port: 5432,
   username: 'node_gmp',
@@ -14,10 +14,10 @@ export const AppDataSource = new DataSource({
   database: 'node_gmp',
   // migrationsRun: true,
   type: "postgres",
-  synchronize: true,
+  synchronize: false,
   logging: true,
   entities: [Users, Products, Cart, Order, CartItem],
-  migrations: ["./build/src/migration/*.js"],
+  migrations: ["./build/src/migrations/*.js"],
   subscribers: [],
 })
 

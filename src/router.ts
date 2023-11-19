@@ -1,5 +1,5 @@
 import express, {Request, Response} from "express";
-import {calculateUser, getUser, removeUser, updateUser} from "./controllers/user";
+import {calculateUser, getCartByUserID, removeUser, updateUser} from "./controllers/user";
 import {getProductById, getProducts} from "./controllers/product";
 import {validateUser} from "./midllware/validateUser";
 
@@ -8,7 +8,7 @@ export const productsRouter = express.Router();
 // const authRouter = express.Router();
 
 profileRouter.get('/cart', async (req: Request, res: Response) => {
-  await getUser(req, res)
+  await getCartByUserID(req, res)
 });
 profileRouter.put('/cart', validateUser,  async (req: Request, res: Response) => {
   await updateUser(req, res);

@@ -1,23 +1,22 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable} from "typeorm"
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToMany} from "typeorm"
 import {Users} from "./Users";
 import {Products} from "./Products";
+import {CartItem} from "./CartItem";
 
 type ORDER_STATUS = 'created' | 'completed';
 @Entity()
 export class Order {
 
-  @PrimaryGeneratedColumn()
-  id: number
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
-  @ManyToOne(() => Users, (user) => user.id)
-  userId: number
+  @ManyToOne(() => Users, (user) => user.id, {cascade: true})
+  user: Users
 
-  @ManyToMany(() => Products, (product) => product.id)
-  @JoinTable()
-  items: {
-    product: Products,
-    count: number
-  }[]
+  @OneToMany(() => CartItem, (cartItem) => cartItem.cart, {
+    cascade: true,
+  })
+  items: CartItem[];
 
   @Column()
   payment: string

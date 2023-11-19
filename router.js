@@ -1,4 +1,4 @@
-import {createUserHandler, deleteUserHandler, updateUserHandler, getUserById} from './controllers/usersControllers.js';
+import {createUserHandler, deleteUserHandler, updateUserHandler, getCartById} from './controllers/usersControllers.js';
 import {addHobbyHandler, deleteHobbyHandler, getHobbiesListHandler} from './controllers/hobbiesController.js';
 
 
@@ -52,7 +52,7 @@ export const router = (req, res) => {
   if (req.method === 'GET') {
     if (url.pathname === '/users') {
       const id = url.searchParams.get("id");
-      getUserById(id, res);
+      getCartById(id, res);
     }
 
     if (url.pathname === '/hobbies') {

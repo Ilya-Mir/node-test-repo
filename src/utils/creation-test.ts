@@ -6,45 +6,46 @@ import {CartItem} from "../entity/CartItem";
 
 
 type NewCartItemData = {
-  productId: number;
+  productId: string;
   count: number;
 };
 
-type NewCartData = {
-  userId: number;
-  items: NewCartItemData[];
-};
-
-export async function createNewCart(newCartData: NewCartData): Promise<Cart> {
+export async function createNewCart(input) {
+  const userRepository = AppDataSource.getRepository(Users);
   const cartRepository = AppDataSource.getRepository(Cart);
   const productRepository = AppDataSource.getRepository(Products);
-  const cartItemRepository = AppDataSource.getRepository(CartItem);
 
 
-  const newCart = new Cart();
-  newCart.userId = newCartData.userId;
-  newCart.isDeleted = false;
-
-  let cartItems = []
-
-  const cartItemsPromises = newCartData.items.map(async (itemData) => {
-    const product = await productRepository.findOne({where: {id: itemData.productId.toString()}})
-    if (!product) {
-      throw new Error(`Product with id ${itemData.productId} not found`);
-    }
-
-    const newCartItem = new CartItem();
-      newCartItem.product = product;
-      newCartItem.count = itemData.count;
-      cartItems.push(newCartItem);
-  })
-
-    await Promise.all(cartItemsPromises);
-
-    newCart.items = cartItems
-
-    console.warn(newCart);
-    // Сохраняем объекты Cart и CartItem в репозитории и возвращаем новый объект Cart:
-    const savedCart = await cartRepository.save(newCart);
-    return savedCart;
+  // Проверка существования пользователя
+  const user = await userRepository.findOne({ where: { id: input.userId } });
+  if (!user) {
+    throw new Error(`User with id "${input.userId}" not found.`);
   }
+
+  // Получение списка продуктов по их ID
+  const products = await Promise.all(
+      input.items.map(async (item) => {
+        const product = await productRepository.findOne({ where: { id: item.productId } });
+        if (!product) {
+          throw new Error(`Product with id "${item.productId}" not found.`);
+        }
+        return { product, count: item.count };
+      })
+  );
+
+  // Создание новой корзины
+  const newCart = new Cart();
+  newCart.user = user;
+  newCart.isDeleted = false;
+  newCart.items = products.map(({ product, count }) => {
+    const cartItem = new CartItem();
+    cartItem.product = product;
+    cartItem.count = count;
+    return cartItem;
+  });
+
+  const savedCart = await cartRepository.save(newCart);
+  return savedCart;
+}
+
+
