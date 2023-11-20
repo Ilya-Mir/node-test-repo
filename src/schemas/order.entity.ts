@@ -1,4 +1,4 @@
-import {CartItemEntity, cart} from './cart.entity';
+import {CartItemEntity} from './cart.entity';
 
 type ORDER_STATUS = 'created' | 'completed';
 
@@ -14,20 +14,20 @@ export interface OrderEntity {
   status: string
 }
 
-const order: OrderEntity = {
-  id: 'dffd6fa8-be6b-47f6-acff-455612620ac2',
-  userId: '0fe36d16-49bc-4aab-a227-f84df899a6cb',
-  items: cart.items,
-  payment: {
-    type: 'paypal',
-    address: undefined,
-    creditCard: undefined
-  },
-  delivery: {
-    type: 'post',
-    address: undefined
-  },
-  comments: '',
-  status: 'created',
-  total: 2,
-}
+// const order: OrderEntity = {
+//   id: "2",
+//   userId: '0fe36d16-49bc-4aab-a227-f84df899a6cb',
+//   items: cart.items,
+//   payment: {
+//     type: 'paypal',
+//     address: undefined,
+//     creditCard: undefined
+//   },
+//   delivery: {
+//     type: 'post',
+//     address: undefined
+//   },
+//   comments: '',
+//   status: 'created',
+//   total: 2,
+// }

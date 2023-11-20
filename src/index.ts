@@ -1,13 +1,15 @@
 import express, {NextFunction, Request, Response} from 'express';
+import "reflect-metadata"
 import {
   ID_HEADER_NAME,
 } from "./constants";
 import {productsRouter, profileRouter} from "./router";
-import bodyParser from "body-parser";
+import AppDataSource, {initDataSource} from "./data-source";
 
 
 const app = express();
 
+initDataSource();
 const logger = (req: Request, res: Response, next: NextFunction) => {
   console.log(`New request: ${req.method}, ${req.url}`);
   next();
@@ -15,6 +17,7 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
 
 app.use(logger);
 app.use(express.json());
+
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   const id = req.get(ID_HEADER_NAME)

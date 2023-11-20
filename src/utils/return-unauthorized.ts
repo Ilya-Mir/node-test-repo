@@ -6,7 +6,7 @@ export const returnUnauthorized = (res: Response) => {
       .send({
         data: null,
         error: {
-          "message": "User is not authorized"
+          "message": "Users is not authorized"
         }
       })
 }

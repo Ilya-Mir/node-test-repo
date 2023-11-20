@@ -5,20 +5,19 @@ import {products} from "../schemas/product.entity";
 export const validateUser = (req: Request, res: Response, next: NextFunction) => {
 
   const userDataSchema = Joi.object({
-    id: Joi.string()
-        .required(),
+    id: Joi.string(),
 
-    items: [
+    items: Joi.array().items(
       Joi.object({
         product: Joi.object({
-          id: Joi.string().valid(...products.map(product => product.id)).required(),
+          id: Joi.string().required(),
           title: Joi.string().required(),
           description: Joi.string().required(),
           price: Joi.number().required()
         }),
         count: Joi.number().required()
       })
-    ],
+    ),
   })
 
   console.warn(req.body, 'here 1');
