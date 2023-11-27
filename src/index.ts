@@ -4,6 +4,7 @@ import {
 } from "./constants";
 import {productsRouter, profileRouter} from "./router";
 import bodyParser from "body-parser";
+import {main} from "./server";
 
 
 const app = express();
@@ -13,6 +14,7 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
   next();
 }
 
+main();
 app.use(logger);
 app.use(express.json());
 

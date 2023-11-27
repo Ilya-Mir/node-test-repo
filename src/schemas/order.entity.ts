@@ -1,33 +1,31 @@
-import {CartItemEntity, cart} from './cart.entity';
-
+import {CartItemEntity, CartItemSchema} from './cart.entity';
+import mongoose, { Schema, Document } from 'mongoose';
 type ORDER_STATUS = 'created' | 'completed';
 
-export interface OrderEntity {
+export interface OrderEntity extends Document {
   delivery: { address: string; type: string };
   total: number;
   comments: string;
   isDeleted?: boolean;
   payment: { address: string; type: string; creditCard: string };
-  id: string;
   userId?: string;
   items: CartItemEntity[];
-  status: string
+  status: ORDER_STATUS
 }
 
-const order: OrderEntity = {
-  id: 'dffd6fa8-be6b-47f6-acff-455612620ac2',
-  userId: '0fe36d16-49bc-4aab-a227-f84df899a6cb',
-  items: cart.items,
+export const OrderSchema = new Schema<OrderEntity>({
+  delivery: { address: String, type: String },
+  total: { type: Number, required: true },
+  comments: { type: String },
+  isDeleted: { type: Boolean, default: false },
   payment: {
-    type: 'paypal',
-    address: undefined,
-    creditCard: undefined
+    address: String,
+    type: String,
+    creditCard: String,
   },
-  delivery: {
-    type: 'post',
-    address: undefined
-  },
-  comments: '',
-  status: 'created',
-  total: 2,
-}
+  userId: { type: String },
+  items: { type: [CartItemSchema], default: [] },
+  status: { type: String, default: "created" },
+});
+
+export const Order = mongoose.model('Order', OrderSchema);
