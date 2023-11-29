@@ -2,7 +2,7 @@ import express, {NextFunction, Request, Response} from 'express';
 import {
   ID_HEADER_NAME,
 } from "./constants";
-import {productsRouter, profileRouter} from "./router";
+import {authRouter, productsRouter, profileRouter} from "./router";
 import bodyParser from "body-parser";
 import {main} from "./server";
 
@@ -39,7 +39,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.use('/api/profile', profileRouter);
 app.use('/api/products', productsRouter);
-// app.use('/api/auth', authRouter);
+app.use('/api/auth', authRouter);
 
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
