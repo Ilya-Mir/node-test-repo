@@ -7,23 +7,23 @@ export const profileRouter = express.Router();
 export const productsRouter = express.Router();
 // const authRouter = express.Router();
 
-profileRouter.get('/cart', (req: Request, res: Response) => {
-  getUser(req, res)
+profileRouter.get('/cart', async (req: Request, res: Response) => {
+ await getUser(req, res)
 });
-profileRouter.put('/cart', validateUser,  (req: Request, res: Response) => {
-  updateUser(req, res);
+profileRouter.put('/cart', validateUser, async (req: Request, res: Response) => {
+  await updateUser(req, res);
 });
-profileRouter.delete('/cart', (req: Request, res: Response) => {
-  removeUser(req, res)
+profileRouter.delete('/cart', async (req: Request, res: Response) => {
+  await removeUser(req, res)
 });
-profileRouter.post('/cart/checkout', (req: Request, res: Response) => {
-  calculateUser(req, res)
+profileRouter.post('/cart/checkout', async (req: Request, res: Response) => {
+  await calculateUser(req, res)
 });
-productsRouter.get('/:productId', (req: Request, res: Response) => {
-  getProductById(req, res)
+productsRouter.get('/:productId', async (req: Request, res: Response) => {
+  await getProductById(req, res)
 });
-productsRouter.get('/', (req: Request, res: Response) => {
-  getProducts(req, res)
+productsRouter.get('/', async (req: Request, res: Response) => {
+  await getProducts(req, res)
 });
 
 // authRouter.post('/register', () => {});

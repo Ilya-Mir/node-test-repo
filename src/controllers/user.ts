@@ -2,13 +2,10 @@ import {calculateUserOrder, deleteUserData, getUserById, updateUserData} from ".
 import {Request, Response} from "express";
 import {hideDeleteUserStatus} from "../utils/hide-delete-status";
 import {ID_HEADER_NAME} from "../constants";
-import Joi from "joi";
-import {products} from "../schemas/product.entity";
-import {validateUser} from "../midllware/validateUser";
 
-export const getUser = (req: Request, res: Response) => {
+export const getUser = async (req: Request, res: Response) => {
   const id = req.get(ID_HEADER_NAME)
-  const user = getUserById(id);
+  const user = await getUserById(id);
 
 
   if (!user) {
@@ -22,10 +19,10 @@ export const getUser = (req: Request, res: Response) => {
 
 }
 
-export const updateUser = (req: Request, res: Response) => {
+export const updateUser = async (req: Request, res: Response) => {
   const id = req.get(ID_HEADER_NAME)
 
-  const result = updateUserData(req.body, id)
+  const result = await updateUserData(req.body, id)
 
   if (result) {
     res
@@ -57,10 +54,10 @@ export const removeUser = (req: Request, res: Response) => {
   }
 }
 
-export const calculateUser = (req: Request, res: Response) => {
+export const calculateUser = async (req: Request, res: Response) => {
   const id = req.get(ID_HEADER_NAME)
 
-  const result = calculateUserOrder(id)
+  const result = await calculateUserOrder(id)
 
   if (result) {
     res

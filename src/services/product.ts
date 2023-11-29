@@ -1,9 +1,12 @@
-import {getAllProducts, getProductById} from "../repository/product";
+import {Product} from "../schemas/product.entity";
 
-export function getProductsService() {
-  return getAllProducts()
+export async function getProductsService() {
+  const products = await Product.find();
+  console.warn(products);
+  return products;
 }
 
-export function getProductService(id: string) {
-  return getProductById(id)
+export async function getProductService(id: string) {
+  const product = await Product.findById(id);
+  return product
 }
