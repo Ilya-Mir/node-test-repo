@@ -1,16 +1,19 @@
-import {Order} from "./schemas/order.entity";
-import {Product} from "./schemas/product.entity";
-import {Cart, CartItem} from "./schemas/cart.entity";
-import {User} from "./schemas/user.entity";
+import debug from "debug";
+
 
 const mongoose = require("mongoose");
 
-let uri = "mongodb://localhost:27017/details";
+let uri = process.env.DATABASE_URL;
 
+console.warn(uri);
+
+const dbLogger = debug("app:db");
 
 main().catch(err => console.log(err));
 
 export async function main() {
+  dbLogger("Connecting to the database...");
+
   await mongoose.connect(uri, { useUnifiedTopology: true, useNewUrlParser: true })
 
 
@@ -18,7 +21,7 @@ export async function main() {
   const connection = mongoose.connection;
 
   connection.once("open", function() {
-    console.log("MongoDB database connection established successfully");
+    dbLogger("MongoDB database connection established successfully");
   });
 
 
