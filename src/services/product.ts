@@ -2,7 +2,6 @@ import {Product} from "../schemas/product.entity";
 
 export async function getProductsService() {
   const products = await Product.find();
-  console.warn(products);
   return products;
 }
 
